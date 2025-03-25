@@ -5,12 +5,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* <Route path="/" element={<HomePage />} /> */}
-        {/* <Route path="/country/:id" element={<CountryDetailsPage />} /> */}
-      </Routes>
-    </Router>
+    <div className="bg-darkBlue text-darkBlue font-sans text-lg text-[64px]">
+    Перевірка Tailwind
+  </div>
   );
 };
 
