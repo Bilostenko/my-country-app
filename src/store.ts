@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import appReducer from './redux/slice';
+import toggleTheme from './redux/slice';
 
 const store = configureStore({
   reducer: {
-    app: appReducer,
+    app: toggleTheme,
   },
 });
 

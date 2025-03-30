@@ -1,19 +1,23 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface AppState {
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
 }
 
+const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+
 const initialState: AppState = {
-  theme: 'light',
+  theme: storedTheme || "light",
 };
 
 const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     toggleTheme(state) {
-      state.theme = state.theme === 'light' ? 'dark' : 'light';
+      state.theme = state.theme === "light" ? "dark" : "light";
+      document.documentElement.classList.toggle("dark", state.theme === "dark");
+      localStorage.setItem("theme", state.theme);
     },
   },
 });
