@@ -20,6 +20,7 @@ export interface Country {
   borders: string[];
   area: number;
 }
+
 // Отримання всіх країн (за замовчуванням)
 export const fetchAllCountries = async (): Promise<Country[]> => {
   try {

@@ -12,7 +12,14 @@ import {
   Alert,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { fetchAllCountries, fetchCountriesByRegion, searchCountriesByName, Country } from "../../services/api";
+import {
+  fetchAllCountries,
+  fetchCountriesByRegion,
+  searchCountriesByName,
+  Country,
+} from "../../services/api";
+import { lightTheme, darkTheme } from "./MUI_theme";
+import { ThemeProvider } from "@mui/material/styles";
 
 type Region = "all" | "africa" | "america" | "asia" | "europe" | "oceania";
 
@@ -22,7 +29,9 @@ export default function Main() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // get countries
   useEffect(() => {
     const loadCountries = async () => {
       try {
@@ -31,7 +40,7 @@ export default function Main() {
         setCountries(data);
         setError(null);
       } catch (err) {
-        setError('Не вдалося завантажити дані про країни');
+        setError("Не вдалося завантажити дані про країни");
       } finally {
         setLoading(false);
       }
@@ -40,18 +49,33 @@ export default function Main() {
     loadCountries();
   }, []);
 
+  // changing dar|light mode for MatrialUI components
+  useEffect(() => {
+    const checkDarkClass = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+    checkDarkClass();
+
+    const observer = new MutationObserver(checkDarkClass);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
   const handleRegionChange = async (event: SelectChangeEvent<Region>) => {
     const newRegion = event.target.value as Region;
     try {
       setLoading(true);
       let data: Country[];
-      
-      if (newRegion === 'all') {
+
+      if (newRegion === "all") {
         data = await fetchAllCountries();
       } else {
         data = await fetchCountriesByRegion(newRegion);
       }
-      
+
       setRegion(newRegion);
       setCountries(data);
       setError(null);
@@ -71,7 +95,7 @@ export default function Main() {
         setCountries(data);
         return;
       }
-      
+
       const data = await searchCountriesByName(searchTerm);
       setCountries(data);
       setError(null);
@@ -88,80 +112,102 @@ export default function Main() {
       handleSearch(searchValue);
     }
   };
-
   return (
     <main>
-      <div className="flex items-center justify-between p-10">
-        <TextField
-          sx={{ width: "26%" }}
-          variant="outlined"
-          placeholder="Введіть назву країни"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => handleSearch(searchValue)} edge="end">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <FormControl variant="outlined" sx={{ width: "16%" }}>
-          <InputLabel>Region</InputLabel>
-          <Select<Region>
-            value={region}
-            onChange={handleRegionChange}
-            label="Region"
+      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+        <div className="flex items-center justify-between p-10 dark:bg-gray-900 dark:text-white">
+          <TextField
+            sx={{ width: "26%" }}
+            variant="outlined"
+            placeholder="Введіть назву країни"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => handleSearch(searchValue)}
+                    edge="end"
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <FormControl
+            variant="outlined"
+            sx={{ width: "16%" }}
+            className="dark:bg-gray-900 dark:text-white"
           >
-            <MenuItem value="all">All Regions</MenuItem>
-            <MenuItem value="africa">Africa</MenuItem>
-            <MenuItem value="america">America</MenuItem>
-            <MenuItem value="asia">Asia</MenuItem>
-            <MenuItem value="europe">Europe</MenuItem>
-            <MenuItem value="oceania">Oceania</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      
-      {error && (
-        <div className="p-4">
-          <Alert severity="error">{error}</Alert>
+            <InputLabel>Region</InputLabel>
+            <Select<Region>
+              value={region}
+              onChange={handleRegionChange}
+              label="Region"
+            >
+              <MenuItem value="all">All Regions</MenuItem>
+              <MenuItem value="africa">Africa</MenuItem>
+              <MenuItem value="america">America</MenuItem>
+              <MenuItem value="asia">Asia</MenuItem>
+              <MenuItem value="europe">Europe</MenuItem>
+              <MenuItem value="oceania">Oceania</MenuItem>
+            </Select>
+          </FormControl>
         </div>
-      )}
-      
-      {loading ? (
-        <div className="flex justify-center p-10">
-          <CircularProgress />
-        </div>
-      ) : (
-        !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-10">
-            {countries.map((country) => (
-              <div 
-                key={country.name.common} 
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
-              >
-                <div className="h-40 overflow-hidden">
-                  <img 
-                    src={country.flags.png} 
-                    alt={country.flags.alt || `Flag of ${country.name.common}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h2 className="text-lg font-bold mb-2">{country.name.common}</h2>
-                  <p><strong>Population:</strong> {country.population.toLocaleString()}</p>
-                  <p><strong>Region:</strong> {country.region}</p>
-                  <p><strong>Capital:</strong> {country.capital?.join(', ') || 'N/A'}</p>
-                </div>
-              </div>
-            ))}
+
+        {error && (
+          <div className="p-4 dark:bg-gray-900 dark:text-white">
+            <Alert severity="error">{error}</Alert>
           </div>
-        )
-      )}
+        )}
+
+        {loading ? (
+          <div className="flex justify-center p-10">
+            <CircularProgress />
+          </div>
+        ) : (
+          !error && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14 p-10 dark:bg-gray-900 dark:text-white">
+              {countries.map((country) => (
+                <div
+                  key={country.name.common}
+                  className="h-full bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg dark:bg-gray-800 dark:text-white6"
+                >
+                  <div className="aspect-video w-full">
+                    <img
+                      width={500}
+                      height={500}
+                      src={country.flags.png}
+                      alt={
+                        country.flags.alt || `Flag of ${country.name.common}`
+                      }
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h2 className="text-lg font-bold mb-2">
+                      {country.name.common}
+                    </h2>
+                    <p>
+                      <strong>Population:</strong>{" "}
+                      {country.population.toLocaleString()}
+                    </p>
+                    <p>
+                      <strong>Region:</strong> {country.region}
+                    </p>
+                    <p>
+                      <strong>Capital:</strong>{" "}
+                      {country.capital?.join(", ") || "N/A"}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        )}
+      </ThemeProvider>
     </main>
   );
 }

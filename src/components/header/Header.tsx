@@ -12,7 +12,7 @@ const Header = () => {
   };
 
   return (
-    <header className="rounded-sm py-8 px-16 mb-4 flex items-center justify-between bg-white shadow-[0px_4px_10px_rgba(0,0,0,0.1)] border-b border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+    <header className="rounded-sm py-8 px-16 flex items-center justify-between bg-white shadow-[0px_4px_10px_rgba(0,0,0,0.1)] border-b border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600">
       <h1 className="text-2xl">Where in the world?</h1>
 
       <button className="flex items-center gap-3"
