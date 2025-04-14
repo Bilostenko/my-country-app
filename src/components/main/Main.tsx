@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   InputAdornment,
@@ -30,6 +31,7 @@ export default function Main() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   // get countries
   useEffect(() => {
@@ -169,9 +171,11 @@ export default function Main() {
           </div>
         ) : (
           !error && (
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14 p-10 dark:bg-gray-900 dark:text-white">
               {countries.map((country) => (
                 <div
+                  onClick={() => navigate(`/country/${country.name.common}`)}
                   key={country.name.common}
                   className="h-full bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg dark:bg-gray-800 dark:text-white6"
                 >

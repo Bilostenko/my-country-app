@@ -54,17 +54,30 @@ export const searchCountriesByName = async (name: string): Promise<Country[]> =>
   }
 };
 
-// Фільтрація полів відповіді (для оптимізації)
-export const fetchCountriesWithFilteredFields = async (): Promise<Partial<Country>[]> => {
+// Фільтрація полів відповіді
+export const fetchCountryByName = async (name: string): Promise<Country | null> => {
   try {
-    // Запитуємо тільки необхідні поля
-    const fields = ['name', 'population', 'region', 'capital', 'flags'];
-    const response = await axios.get<Partial<Country>[]>(
-      `https://restcountries.com/v3.1/all?fields=${fields.join(',')}`
+    const fields = [
+      'name',
+      'cca3',
+      'capital',
+      'region',
+      'subregion',
+      'population',
+      'tld',
+      'currencies',
+      'languages',
+      'borders',
+      'flags'
+    ];
+
+    const response = await axios.get<Country[]>(
+      `https://restcountries.com/v3.1/name/${name}?fullText=true&fields=${fields.join(',')}`
     );
-    return response.data;
+
+    return response.data[0] || null;
   } catch (error) {
-    console.error("Помилка при отриманні фільтрованих даних:", error);
-    throw error;
+    console.error("Не вдалося отримати країну:", error);
+    return null;
   }
 };
