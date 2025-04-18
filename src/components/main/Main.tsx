@@ -90,10 +90,9 @@ export default function Main() {
 
   const handleSearch = async (searchTerm: string) => {
     if (!searchTerm.trim()) return;
-  
+
     navigate(`/country/${encodeURIComponent(searchTerm.trim())}`);
   };
-  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -103,9 +102,9 @@ export default function Main() {
   return (
     <main>
       <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
-        <div className="flex items-center justify-between p-10 dark:bg-gray-900 dark:text-white">
+        <div className="flex flex-col gap-4 p-10 md:flex-row md:items-center md:justify-between dark:bg-gray-900 dark:text-white">
           <TextField
-            sx={{ width: "26%" }}
+            sx={{ width: "100%" }} // Використовуємо 100% ширини на мобільних екранах
             variant="outlined"
             placeholder="Enter country name"
             value={searchValue}
@@ -126,7 +125,7 @@ export default function Main() {
           />
           <FormControl
             variant="outlined"
-            sx={{ width: "16%" }}
+            sx={{ width: "100%" }} // Використовуємо 100% ширини на мобільних екранах
             className="dark:bg-gray-900 dark:text-white"
           >
             <InputLabel>Region</InputLabel>
@@ -144,7 +143,6 @@ export default function Main() {
             </Select>
           </FormControl>
         </div>
-
         {error && (
           <div className="p-4 dark:bg-gray-900 dark:text-white">
             <Alert severity="error">{error}</Alert>
@@ -157,7 +155,6 @@ export default function Main() {
           </div>
         ) : (
           !error && (
-            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-14 p-10 dark:bg-gray-900 dark:text-white">
               {countries.map((country) => (
                 <div

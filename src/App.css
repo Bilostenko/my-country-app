@@ -3,3 +3,12 @@
   margin: 0 auto;
   text-align: center;
 }
+body {
+  background-color: white;
+  color: black;
+}
+
+.dark body {
+  background-color: #111827; /* gray-900 */
+  color: white;
+}

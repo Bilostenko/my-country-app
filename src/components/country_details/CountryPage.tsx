@@ -55,8 +55,8 @@ const CountryPage = () => {
   if (loading) return <div className="p-4">⏳ Loading...</div>;
   if (!country)
     return (
-      <div className="p-4">
-      <p>❌ Country with the "{name}" was not found</p>
+      <div className="p-4 my-16 text-3xl">
+      <p className="py-5">❌ Country with the "{name}" was not found</p>
       <Button
         variant="outlined"
         startIcon={<ArrowBackIcon />}
@@ -75,25 +75,43 @@ const CountryPage = () => {
   const languageList = Object.values(country.languages || {}).join(", ");
 
   return (
-    <div className="p-4">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-      >
-        ← Go back
-      </button>
+    <div className="my-0 lg:my-20 min-h-screen w-full bg-white text-black dark:bg-gray-900 dark:text-white">
 
-      <h1 className="text-3xl font-bold mb-4">{country.name.common} ({country.cca3})</h1>
-      <img src={country.flags.svg} alt={country.flags.alt || "Flag"} className="w-64 h-auto mb-4" />
-      <p><strong>Official Name:</strong> {country.name.official}</p>
-      <p><strong>Capital:</strong> {country.capital?.join(", ") || "N/A"}</p>
-      <p><strong>Region:</strong> {country.region}</p>
-      <p><strong>Subregion:</strong> {country.subregion}</p>
-      <p><strong>Population:</strong> {country.population.toLocaleString()}</p>
-      <p><strong>Top Level Domain:</strong> {country.tld?.join(", ")}</p>
-      <p><strong>Currencies:</strong> {currencyList || "N/A"}</p>
-      <p><strong>Languages:</strong> {languageList || "N/A"}</p>
-      <p><strong>Bordering Countries:</strong> {country.borders?.join(", ") || "None"}</p>
+
+      <div className="p-4 max-w-[1200px] mx-auto flex flex-col text-xl">
+        <button
+          onClick={() => navigate(-1)}
+          className="self-start mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded dark:bg-gray-800 dark:text-white"
+        >
+          ← Go back
+        </button>
+  
+        <div className="flex flex-col lg:flex-row items-center lg:items-start">
+          <img
+            src={country.flags.svg}
+            alt={country.flags.alt || "Flag"}
+            className="w-72 sm:w-96 h-auto mb-8 lg:mb-0"
+          />
+  
+          <div className="lg:ml-8 mb-8 lg:mb-0 leading-loose text-center lg:text-left">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-6">
+              {country.name.common} ({country.cca3})
+            </h1>
+            <p><strong>Official Name:</strong> {country.name.official}</p>
+            <p><strong>Capital:</strong> {country.capital?.join(", ") || "N/A"}</p>
+            <p><strong>Region:</strong> {country.region}</p>
+            <p><strong>Subregion:</strong> {country.subregion}</p>
+          </div>
+  
+          <div className="lg:ml-8 leading-loose text-center lg:text-left">
+            <p><strong>Population:</strong> {country.population.toLocaleString()}</p>
+            <p><strong>Top Level Domain:</strong> {country.tld?.join(", ")}</p>
+            <p><strong>Currencies:</strong> {currencyList || "N/A"}</p>
+            <p><strong>Languages:</strong> {languageList || "N/A"}</p>
+            <p><strong>Bordering Countries:</strong> {country.borders?.join(", ") || "None"}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
