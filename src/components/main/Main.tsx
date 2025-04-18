@@ -42,7 +42,7 @@ export default function Main() {
         setCountries(data);
         setError(null);
       } catch (err) {
-        setError("Не вдалося завантажити дані про країни");
+        setError("Failed to load country data.");
       } finally {
         setLoading(false);
       }
@@ -82,32 +82,18 @@ export default function Main() {
       setCountries(data);
       setError(null);
     } catch (err) {
-      setError(`Не вдалося завантажити країни з регіону ${newRegion}`);
+      setError(`Unable to load countries from the region ${newRegion}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleSearch = async (searchTerm: string) => {
-    try {
-      setLoading(true);
-      if (!searchTerm.trim()) {
-        // Якщо поле пошуку порожнє, повертаємо всі країни
-        const data = await fetchAllCountries();
-        setCountries(data);
-        return;
-      }
-
-      const data = await searchCountriesByName(searchTerm);
-      setCountries(data);
-      setError(null);
-    } catch (err) {
-      setError(`Не знайдено країн, що відповідають "${searchTerm}"`);
-      setCountries([]);
-    } finally {
-      setLoading(false);
-    }
+    if (!searchTerm.trim()) return;
+  
+    navigate(`/country/${encodeURIComponent(searchTerm.trim())}`);
   };
+  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -121,7 +107,7 @@ export default function Main() {
           <TextField
             sx={{ width: "26%" }}
             variant="outlined"
-            placeholder="Введіть назву країни"
+            placeholder="Enter country name"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleKeyDown}

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import toggleTheme from './redux/slice';
+import toggleTheme from './redux/appSlice';
+import searchReducer from './redux/searchSlice';
 
 const store = configureStore({
   reducer: {
     app: toggleTheme,
+    search: searchReducer
   },
 });
 

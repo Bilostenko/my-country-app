@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { fetchCountryByName } from "../../services/api";
 
 interface CountryDetailsType {
@@ -10,7 +9,7 @@ interface CountryDetailsType {
     common: string;
     official: string;
   };
-  cca3: string;
+  cca3?: string;
   capital?: string[];
   population: number;
   region: string;
@@ -33,12 +32,10 @@ interface CountryDetailsType {
   };
 }
 
-// ВИПРАВИТИ ПОМИЛКИ
-const CountryDetails = () => {
+const CountryPage = () => {
   const navigate = useNavigate();
   const [country, setCountry] = useState<CountryDetailsType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { name } = useParams<{ name: string }>();
 
   useEffect(() => {
@@ -48,30 +45,27 @@ const CountryDetails = () => {
       const data = await fetchCountryByName(name);
       if (data) {
         setCountry(data);
-        setError(null);
-      } else {
-        setError("Країну не знайдено");
-      }
+      } 
       setLoading(false);
     };
 
     loadCountry();
   }, [name]);
 
-  if (loading) return <div className="p-4">⏳ Завантаження...</div>;
+  if (loading) return <div className="p-4">⏳ Loading...</div>;
   if (!country)
     return (
       <div className="p-4">
-        <p>❌ Країну не знайдено</p>
-        <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
-          sx={{ mb: 2 }}
-        >
-          Назад
-        </Button>
-      </div>
+      <p>❌ Country with the "{name}" was not found</p>
+      <Button
+        variant="outlined"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate("/")}
+        sx={{ mb: 2 }}
+      >
+        Go back
+      </Button>
+    </div>
     );
 
   const currencyList = Object.values(country.currencies || {})
@@ -86,7 +80,7 @@ const CountryDetails = () => {
         onClick={() => navigate(-1)}
         className="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
       >
-        ← Назад
+        ← Go back
       </button>
 
       <h1 className="text-3xl font-bold mb-4">{country.name.common} ({country.cca3})</h1>
@@ -104,4 +98,4 @@ const CountryDetails = () => {
   );
 };
 
-export default CountryDetails;
+export default CountryPage;
