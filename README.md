@@ -21,17 +21,17 @@
 
 ---
 
-Цей додаток — інтерфейс для дослідження країн світу, який тягне дані з **REST Countries API**. Побудований за допомогою сучасного стеку технологій, підтримує **світлу/темну тему**, **адаптивний дизайн** та має інтуїтивну взаємодію з користувачем.
+This application is an intuitive and stylish interface for exploring countries around the globe using data from the **REST Countries API**. Built with a modern frontend stack, it supports **light/dark theme switching**, **responsive design**, and smooth user interaction.
 
 ## ✨ Features
 
-- 🔄 **Перемикання теми**: світла / темна — одним кліком без зайвих нервів.
-- 🌐 **Завантаження всіх країн** на головній сторінці через API.
-- 🔍 **Пошук за назвою**: працює навіть якщо ввести лише частину слова.
-- 🌍 **Фільтрація за регіоном** через дропдаун.
-- 📱 **Адаптивний дизайн** для мобілок, планшетів і великих екранів.
+- 🔄 **Theme Toggle** — Light and Dark modes with just one click. No drama.
+- 🌐 **Fetches all countries** from the API on the homepage.
+- 🔍 **Search by name** — Type part of a name and get all matching countries.
+- 🌍 **Filter by region** using a dropdown select.
+- 📱 **Responsive UI** — Looks great on mobile, tablet, or big ol’ desktop.
 
-## 🧰 Технології
+## 🧰 Technologies Used
 
 - **React** `^19.0.0`
 - **TypeScript**
@@ -47,5 +47,14 @@
 
 ## 🖼️ Screenshots
 
-![Todo List Screenshot](https://github.com/Bilostenko/my-country-app/blob/main/localhost_5173_%20(1).png)
+Here’s a peek at the app:
 
+![App Screenshot](https://github.com/Bilostenko/my-country-app/blob/main/localhost_5173_%20(1).png)
+
+---
+
+## 🚀 Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/countries-explorer.git
