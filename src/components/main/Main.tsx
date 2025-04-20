@@ -8,14 +8,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent,
   CircularProgress,
   Alert,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   fetchAllCountries,
-  fetchCountriesByRegion,
   Country,
 } from "../../services/api";
 import { lightTheme, darkTheme } from "./MUI_theme";
