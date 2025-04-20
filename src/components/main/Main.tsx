@@ -16,11 +16,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   fetchAllCountries,
   fetchCountriesByRegion,
-  searchCountriesByName,
   Country,
 } from "../../services/api";
 import { lightTheme, darkTheme } from "./MUI_theme";
 import { ThemeProvider } from "@mui/material/styles";
+import {handleRegionChange, useSearchHandler} from "./handlers";
 
 type Region = "all" | "africa" | "america" | "asia" | "europe" | "oceania";
 
@@ -31,6 +31,7 @@ export default function Main() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const handleSearch = useSearchHandler();
   const navigate = useNavigate();
 
   // get countries
@@ -51,7 +52,7 @@ export default function Main() {
     loadCountries();
   }, []);
 
-  // changing dar|light mode for MatrialUI components
+  // changing dark|light mode for MatrialUI components
   useEffect(() => {
     const checkDarkClass = () => {
       setIsDarkMode(document.documentElement.classList.contains("dark"));
@@ -66,33 +67,12 @@ export default function Main() {
 
     return () => observer.disconnect();
   }, []);
-  const handleRegionChange = async (event: SelectChangeEvent<Region>) => {
-    const newRegion = event.target.value as Region;
-    try {
-      setLoading(true);
-      let data: Country[];
+  
+  // const handleSearch = async (searchTerm: string) => {
+  //   if (!searchTerm.trim()) return;
 
-      if (newRegion === "all") {
-        data = await fetchAllCountries();
-      } else {
-        data = await fetchCountriesByRegion(newRegion);
-      }
-
-      setRegion(newRegion);
-      setCountries(data);
-      setError(null);
-    } catch (err) {
-      setError(`Unable to load countries from the region ${newRegion}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearch = async (searchTerm: string) => {
-    if (!searchTerm.trim()) return;
-
-    navigate(`/country/${encodeURIComponent(searchTerm.trim())}`);
-  };
+  //   navigate(`/country/${encodeURIComponent(searchTerm.trim())}`);
+  // };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -131,7 +111,9 @@ export default function Main() {
             <InputLabel>Region</InputLabel>
             <Select<Region>
               value={region}
-              onChange={handleRegionChange}
+              onChange={(e) =>
+                handleRegionChange(e, setRegion, setCountries, setLoading, setError)
+              }
               label="Region"
             >
               <MenuItem value="all">All Regions</MenuItem>
